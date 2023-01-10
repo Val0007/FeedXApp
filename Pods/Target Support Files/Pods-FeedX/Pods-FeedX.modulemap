@@ -1,0 +1,6 @@
+framework module Pods_FeedX {
+  umbrella header "Pods-FeedX-umbrella.h"
+
+  export *
+  module * { export * }
+}
