@@ -10,29 +10,36 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    let folderBar = FolderBar()
+    var folderBar:FolderBar?
     let tableView = UITableView()
     let feedArray :[feedItem] = []
-    let db = SqlDB()
     var st:SlideInPresentationManager?
     let tb = TabButtons()
+    let db = SqlDB.shared
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        let folders = db.getFolders()
+        folderBar = FolderBar(frame: .zero, f: folders)
         setup()
         layout()
         style()
         NotificationManager().status()
         UIApplication.shared.isStatusBarHidden=true; // for status bar hide
+        fetchData()
+
     }
     
-    override func viewDidAppear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.navigationBar.isHidden = true
     }
     
     private func setup(){
         self.navigationController?.navigationBar.isHidden = true
         view.backgroundColor = .white
+        guard let folderBar = folderBar else {
+            return
+        }
         view.addSubview(folderBar)
         
         view.addSubview(tableView)
@@ -43,6 +50,17 @@ class ViewController: UIViewController {
         tb.delegate = self
         
 
+    }
+    
+    private func fetchData(){
+        let folderName = "Motorsport"
+        print("FETCHING DATA")
+        let resutls = SqlDB.shared.getURLS(foldername: folderName)
+        print(resutls)
+        for r in resutls{
+            Networking().getData(urlP:r.url , pubL: r.publisher)
+            print("Results where")
+        }
     }
     
     
@@ -72,6 +90,10 @@ class ViewController: UIViewController {
     }
     
     private func layout(){
+        guard let folderBar = folderBar else {
+            return
+        }
+
         folderBar.anchor(top:view.safeAreaLayoutGuide.topAnchor,left: view.safeAreaLayoutGuide.leftAnchor,right: view.safeAreaLayoutGuide.rightAnchor,height: view.frame.height * 0.08)
         
         tableView.anchor(top: folderBar.bottomAnchor, left: view.safeAreaLayoutGuide.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.safeAreaLayoutGuide.rightAnchor)
@@ -82,11 +104,6 @@ class ViewController: UIViewController {
         tb.anchor(bottom:view.bottomAnchor,paddingBottom: 50,width: view.frame.width * 0.5,height: view.frame.height * 0.1)
     }
     
-    private func presentInputCard(){
-        let inputCard = InputCard()
-        inputCard.modalPresentationStyle = .overCurrentContext
-        self.present(inputCard, animated: true, completion: nil)
-    }
 
 
 }
@@ -128,7 +145,20 @@ extension ViewController:tabButtonClick{
 }
 
 extension ViewController:SideVCPush{
-    func pushVC() {
-        self.navigationController?.pushViewController(AddFolderVC(), animated: true)
+    func pushVC(type:types) {
+        switch type {
+        case .anf:
+            self.navigationController?.pushViewController(AddFolderVC(), animated: true)
+        case .anu:
+            self.navigationController?.pushViewController(AddURLVC(), animated: true)
+        case .df:
+            return
+        case .du:
+            return
+        case .f:
+            return
+        case .rl:
+            return
+        }
     }
 }

@@ -38,8 +38,8 @@ class Networking:NSObject,XMLParserDelegate{
     var currentDictionary: [String: String]? // the current dictionary
     var cv:String = ""
     
-    func getData(){
-        let url = URL(string: "https://www.economist.com/business/rss.xml")!
+    func getData(urlP:String,pubL:String){
+        guard let url = URL(string: urlP) else {return}
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data, error == nil else {
                 print(error ?? "Unknown error")
@@ -50,7 +50,7 @@ class Networking:NSObject,XMLParserDelegate{
             parser.delegate = self
             if parser.parse() {
                 for (index,_) in self.results.enumerated() {
-                    self.results[index].feedPublisher = self.channelName
+                    self.results[index].feedPublisher = pubL
                 }
                 for result in self.results{
                     print(result)

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8F2C19048C8692CEF59C6C46 /* Pods_FeedX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F359CC190ACF347922FD235 /* Pods_FeedX.framework */; };
+		B3006963297190E200776483 /* AddURLVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3006962297190E200776483 /* AddURLVC.swift */; };
 		B31C371828ED491400FA3464 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31C371728ED491400FA3464 /* AppDelegate.swift */; };
 		B31C371A28ED491400FA3464 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31C371928ED491400FA3464 /* SceneDelegate.swift */; };
 		B31C371C28ED491400FA3464 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31C371B28ED491400FA3464 /* ViewController.swift */; };
@@ -28,6 +29,7 @@
 		B3F1C7D2296C40C700CDB9C2 /* SlideScreenTransitionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3F1C7D1296C40C700CDB9C2 /* SlideScreenTransitionDelegate.swift */; };
 		B3F1C7D4296C41D600CDB9C2 /* SideScreenPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3F1C7D3296C41D600CDB9C2 /* SideScreenPresentationController.swift */; };
 		B3F1C7D6296C8A6000CDB9C2 /* TabButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3F1C7D5296C8A6000CDB9C2 /* TabButtons.swift */; };
+		B3FB703429704B11003E9586 /* PaddedTf.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3FB703329704B11003E9586 /* PaddedTf.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -98,6 +100,7 @@
 /* Begin PBXFileReference section */
 		06B15C612D4C2EF5F90F9CAA /* Pods-FeedX.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FeedX.debug.xcconfig"; path = "Target Support Files/Pods-FeedX/Pods-FeedX.debug.xcconfig"; sourceTree = "<group>"; };
 		6F359CC190ACF347922FD235 /* Pods_FeedX.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FeedX.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B3006962297190E200776483 /* AddURLVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddURLVC.swift; sourceTree = "<group>"; };
 		B31C371428ED491400FA3464 /* FeedX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FeedX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B31C371728ED491400FA3464 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B31C371928ED491400FA3464 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -123,6 +126,7 @@
 		B3F1C7D1296C40C700CDB9C2 /* SlideScreenTransitionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideScreenTransitionDelegate.swift; sourceTree = "<group>"; };
 		B3F1C7D3296C41D600CDB9C2 /* SideScreenPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideScreenPresentationController.swift; sourceTree = "<group>"; };
 		B3F1C7D5296C8A6000CDB9C2 /* TabButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabButtons.swift; sourceTree = "<group>"; };
+		B3FB703329704B11003E9586 /* PaddedTf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddedTf.swift; sourceTree = "<group>"; };
 		E059A516919B252E606E5F7E /* Pods-FeedX.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FeedX.release.xcconfig"; path = "Target Support Files/Pods-FeedX/Pods-FeedX.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -240,6 +244,8 @@
 			isa = PBXGroup;
 			children = (
 				B36D7F39296D3F21002FF919 /* AddFolderVC.swift */,
+				B3FB703329704B11003E9586 /* PaddedTf.swift */,
+				B3006962297190E200776483 /* AddURLVC.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -451,7 +457,9 @@
 				B31C372228ED491400FA3464 /* FeedX.xcdatamodeld in Sources */,
 				B36D7F3A296D3F21002FF919 /* AddFolderVC.swift in Sources */,
 				B32A4F342932496C00726312 /* DBService.swift in Sources */,
+				B3FB703429704B11003E9586 /* PaddedTf.swift in Sources */,
 				B3F1C7CE296C328400CDB9C2 /* SideVC.swift in Sources */,
+				B3006963297190E200776483 /* AddURLVC.swift in Sources */,
 				B3F1C7D6296C8A6000CDB9C2 /* TabButtons.swift in Sources */,
 				B3209CCA29334A5B00945D64 /* operation.swift in Sources */,
 				B36AF38A2932913400124182 /* NotificationService.swift in Sources */,

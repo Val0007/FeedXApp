@@ -14,14 +14,14 @@ class FolderBar: UIView {
     let stackView = UIStackView()
     let scrollView = UIScrollView()
     let underLineView = UIView()
-    let folders:[String] = ["Motorcycle","cars","business","tech"]
+    let folders:[String]
     var selectedView:UIView?
 
 
-    override init(frame: CGRect) {
+    init(frame: CGRect,f:[String]) {
+        folders = f
         super.init(frame: frame)
         setup()
-        layout()
         style()
     }
     
@@ -30,6 +30,7 @@ class FolderBar: UIView {
     }
     
     override func layoutSubviews() {
+        layout()
         for i in stackView.arrangedSubviews{
             print(i.frame.origin.x)
         }
@@ -84,9 +85,10 @@ class FolderBar: UIView {
             b.widthAnchor.constraint(equalToConstant: 100).isActive = true
             
         }
-
-        selectedView = stackView.arrangedSubviews[0]
-        choseView()
+        if !folders.isEmpty{
+            selectedView = stackView.arrangedSubviews[0]
+            choseView()
+        }
 
         
         

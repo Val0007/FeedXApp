@@ -10,28 +10,39 @@ import Foundation
 import UIKit
 import DropDown
 
-class InputCard: UIViewController {
+protocol InputDelegate{
+    func addurl(link:InsertType)
+}
+
+class InputCard: UIView {
     
     let container = UIView()
     let foldername = UIView()
     let urlInput = UITextField()
+    let publisherInput = UITextField()
     let button = UIButton()
     let containerPadding:CGFloat = 8.0
     let dropDown = DropDown()
     let foldernameText = UILabel()
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    let folders:[String]
+    var delegate:InputDelegate?
+    
+     init(frame: CGRect,f:[String]) {
+        folders = f
+        super.init(frame: frame)
         setup()
-        layout()
-        style()
 
     }
     
-    override func viewDidLayoutSubviews() {
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    //why?
+    override func layoutSubviews() {
+        layout()
+        style()
 
-        //animation()
-        
     }
     
     
@@ -40,21 +51,24 @@ class InputCard: UIViewController {
     }
     
     @objc func handleAdd(){
-        animation()
+        guard let pbName = publisherInput.text, !pbName.isEmpty else {return}
+       guard let u = urlInput.text,!u.isEmpty else {return}
+        guard let f = foldernameText.text else {return}
+        delegate?.addurl(link: .Link(f, pbName, u))
+        //animation()
     }
     
     private func setup(){
-        view.backgroundColor = .gray.withAlphaComponent(0.3)
+        backgroundColor = .gray.withAlphaComponent(0.3)
         
-        
-        view.addSubview(container)
-        container.addSubview(urlInput)
-        container.addSubview(button)
-        
-        container.addSubview(foldername)
+        addSubview(urlInput)
+        addSubview(button)
+        addSubview(foldername)
+        addSubview(publisherInput)
         foldername.addSubview(foldernameText)
+        
         dropDown.direction = .bottom
-        dropDown.dataSource = ["Car", "Motorcycle", "Truck","Car", "Motorcycle", "Truck"]
+        dropDown.dataSource = folders
         dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
             self.foldernameText.text = item
         }
@@ -64,7 +78,7 @@ class InputCard: UIViewController {
         
     }
     private func style(){
-        container.backgroundColor = .white
+        //container.backgroundColor = .white
         
         foldername.backgroundColor  = .systemGray6
         foldername.layer.borderWidth = 0.5
@@ -73,6 +87,7 @@ class InputCard: UIViewController {
         foldernameText.textColor = .black
         foldernameText.font = UIFont.systemFont(ofSize: 18)
         foldernameText.text = "Click to select"
+        foldernameText.backgroundColor = .yellow
 
 
 
@@ -82,32 +97,39 @@ class InputCard: UIViewController {
         urlInput.placeholder  = "Paste URL"
         urlInput.font = UIFont.systemFont(ofSize: 18)
         urlInput.layer.cornerRadius = 5
+        
+        publisherInput.backgroundColor  = .systemGray6
+        publisherInput.layer.borderWidth = 0.5
+        publisherInput.layer.borderColor = UIColor.black.cgColor
+        publisherInput.placeholder  = "Publisher Name"
+        publisherInput.font = UIFont.systemFont(ofSize: 18)
+        publisherInput.layer.cornerRadius = 5
 
         
         button.backgroundColor  = .twitterBlue
         button.layer.cornerRadius = containerPadding
         button.setTitle("Add URL", for: .normal)
         button.addTarget(self, action: #selector(handleAdd), for: .touchUpInside)
-
         
  
 
         
     }
     private func layout(){
-        container.anchor(left:view.safeAreaLayoutGuide.leftAnchor,bottom: view.safeAreaLayoutGuide.bottomAnchor,right: view.safeAreaLayoutGuide.rightAnchor,paddingLeft: 8,paddingBottom: containerPadding,paddingRight: 8,height: view.frame.height * 0.4)
         
-        
-        view.layoutIfNeeded()
-        foldername.anchor(top: container.topAnchor, left: container.leftAnchor,right: container.rightAnchor, paddingTop: containerPadding*3, paddingLeft: containerPadding, paddingRight: containerPadding,height: container.frame.height * 0.18)
+        layoutIfNeeded()
+        foldername.anchor(top: topAnchor, left: leftAnchor,right: rightAnchor, paddingTop: containerPadding*3, paddingLeft: containerPadding, paddingRight: containerPadding,height: frame.height * 0.18)
         foldernameText.addConstraintsToFillView(foldername)
+        foldername.backgroundColor = .red
         foldernameText.textAlignment = .left
         
-        urlInput.anchor(top: foldername.bottomAnchor, left: container.leftAnchor,right: container.rightAnchor, paddingTop: containerPadding*3, paddingLeft: containerPadding, paddingRight: containerPadding,height: container.frame.height * 0.18)
+        urlInput.anchor(top: foldername.bottomAnchor, left: leftAnchor,right: rightAnchor, paddingTop: containerPadding*3, paddingLeft: containerPadding, paddingRight: containerPadding,height: frame.height * 0.18)
         
-        button.anchor(left: container.leftAnchor,bottom: container.bottomAnchor,right: container.rightAnchor, paddingTop: containerPadding*3, paddingLeft: containerPadding, paddingBottom: containerPadding * 2,paddingRight: containerPadding,height: container.frame.height * 0.2)
+        publisherInput.anchor(top: urlInput.bottomAnchor, left: leftAnchor,right: rightAnchor, paddingTop: containerPadding*3, paddingLeft: containerPadding, paddingRight: containerPadding,height: frame.height * 0.18)
         
-        view.layoutIfNeeded()
+        button.anchor(left: leftAnchor,bottom: bottomAnchor,right: rightAnchor, paddingTop: containerPadding*3, paddingLeft: containerPadding, paddingBottom: containerPadding * 2,paddingRight: containerPadding,height: frame.height * 0.2)
+        
+        layoutIfNeeded()
         dropDown.anchorView = foldername
         dropDown.bottomOffset = CGPoint(x: 0, y:(dropDown.anchorView?.plainView.bounds.height)!)
         

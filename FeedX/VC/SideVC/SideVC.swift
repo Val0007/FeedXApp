@@ -8,7 +8,7 @@
 import UIKit
 
 protocol SideVCPush{
-    func pushVC()
+    func pushVC(type:types)
 }
 
 enum types:String,CaseIterable{
@@ -42,7 +42,7 @@ class SideVC: UIViewController {
         }
     
     override func viewDidLayoutSubviews() {
-        view.layoutIfNeeded()
+        view.layoutIfNeeded() //why?
         for stack in mainStack.arrangedSubviews{
             let bottomLine = CALayer()
             bottomLine.frame = CGRect(x: 0, y: stack.frame.size.height - 10, width: stack.frame.size.width, height: 1)
@@ -100,7 +100,7 @@ class SideVC: UIViewController {
             let op = types.allCases[tag]
             print(op.rawValue)
             dismiss(animated: true, completion: nil)
-            delegate?.pushVC()
+            delegate?.pushVC(type: op)
         }
 
     }
