@@ -62,9 +62,11 @@ class InputCard: UIView {
         backgroundColor = .gray.withAlphaComponent(0.3)
         
         addSubview(urlInput)
+        urlInput.delegate  = self
         addSubview(button)
         addSubview(foldername)
         addSubview(publisherInput)
+        publisherInput.delegate = self
         foldername.addSubview(foldernameText)
         
         dropDown.direction = .bottom
@@ -202,4 +204,14 @@ extension InputCard{
         //self.container.layer.addSublayer(movingLayer)
     }
 
+}
+
+
+extension InputCard:UITextFieldDelegate{
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+        urlInput.resignFirstResponder()
+        publisherInput.resignFirstResponder()
+        return true
+    }
 }

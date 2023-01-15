@@ -16,6 +16,7 @@ class ViewController: UIViewController {
     var st:SlideInPresentationManager?
     let tb = TabButtons()
     let db = SqlDB.shared
+    var items:[feedItem] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +27,7 @@ class ViewController: UIViewController {
         style()
         NotificationManager().status()
         UIApplication.shared.isStatusBarHidden=true; // for status bar hide
-        fetchData()
+        fetchData(folderName: folders[0])
 
     }
     
@@ -40,11 +41,13 @@ class ViewController: UIViewController {
         guard let folderBar = folderBar else {
             return
         }
+        folderBar.delegate = self
         view.addSubview(folderBar)
         
         view.addSubview(tableView)
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.register(urlCell.self, forCellReuseIdentifier: urlCell.identifier)
         
         view.addSubview(tb)
         tb.delegate = self
@@ -52,14 +55,25 @@ class ViewController: UIViewController {
 
     }
     
-    private func fetchData(){
-        let folderName = "Motorsport"
+    private func fetchData(folderName:String){
         print("FETCHING DATA")
         let resutls = SqlDB.shared.getURLS(foldername: folderName)
         print(resutls)
+        let myGroup = DispatchGroup()
+
         for r in resutls{
-            Networking().getData(urlP:r.url , pubL: r.publisher)
-            print("Results where")
+            myGroup.enter()
+            Networking().getData(urlP:r.url , pubL: r.publisher, completion: { resultitems in
+                self.items.append(contentsOf: resultitems)
+                myGroup.leave()
+            })
+        }
+        
+        myGroup.notify(queue: .main){
+            print("COMPLETED")
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         }
     }
     
@@ -112,22 +126,25 @@ class ViewController: UIViewController {
 extension ViewController:UITableViewDataSource,UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return items.count
     }
         
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell  = UITableViewCell()
-        if var val = UserDefaults.standard.value(forKey: "backk") as? Bool{
-            cell.textLabel?.text = "\(val)"
-        }
-        else{
-            cell.textLabel?.text = "Row"
-        }
+        let cell  = tableView.dequeueReusableCell(withIdentifier: urlCell.identifier, for: indexPath) as! urlCell
+        let item = items[indexPath.row]
+        cell.makeCell(item: item)
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         view.frame.height * 0.11
+    }
+    
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let item = items[indexPath.row]
+        let wk = WebView(s: item.feedItemLink)
+        present(wk, animated: true, completion: nil)
     }
     
 }
@@ -160,5 +177,12 @@ extension ViewController:SideVCPush{
         case .rl:
             return
         }
+    }
+}
+
+extension ViewController:FolderBarDelegate{
+    func switchFolder(folder: String) {
+        self.items = []
+        fetchData(folderName: folder)
     }
 }

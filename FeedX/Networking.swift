@@ -38,7 +38,7 @@ class Networking:NSObject,XMLParserDelegate{
     var currentDictionary: [String: String]? // the current dictionary
     var cv:String = ""
     
-    func getData(urlP:String,pubL:String){
+    func getData(urlP:String,pubL:String,completion:@escaping([feedItem])->()){
         guard let url = URL(string: urlP) else {return}
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data, error == nil else {
@@ -55,7 +55,7 @@ class Networking:NSObject,XMLParserDelegate{
                 for result in self.results{
                     print(result)
                 }
-
+                completion(self.results)
             }
         }
         task.resume()

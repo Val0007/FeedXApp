@@ -23,6 +23,9 @@
 		B32A4F342932496C00726312 /* DBService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B32A4F332932496C00726312 /* DBService.swift */; };
 		B36AF38A2932913400124182 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36AF3892932913400124182 /* NotificationService.swift */; };
 		B36D7F3A296D3F21002FF919 /* AddFolderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36D7F39296D3F21002FF919 /* AddFolderVC.swift */; };
+		B3DF483A2974590600668643 /* urlCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3DF48392974590600668643 /* urlCell.swift */; };
+		B3DF483C29745EC100668643 /* paddedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3DF483B29745EC000668643 /* paddedLabel.swift */; };
+		B3DF483E297465AC00668643 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3DF483D297465AC00668643 /* WebView.swift */; };
 		B3F1C7CB296C323F00CDB9C2 /* TabVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3F1C7CA296C323F00CDB9C2 /* TabVC.swift */; };
 		B3F1C7CE296C328400CDB9C2 /* SideVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3F1C7CD296C328400CDB9C2 /* SideVC.swift */; };
 		B3F1C7D0296C3BAD00CDB9C2 /* SideScreenPresentationAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3F1C7CF296C3BAD00CDB9C2 /* SideScreenPresentationAnimator.swift */; };
@@ -120,6 +123,9 @@
 		B32A4F892932539000726312 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		B36AF3892932913400124182 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		B36D7F39296D3F21002FF919 /* AddFolderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFolderVC.swift; sourceTree = "<group>"; };
+		B3DF48392974590600668643 /* urlCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = urlCell.swift; sourceTree = "<group>"; };
+		B3DF483B29745EC000668643 /* paddedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = paddedLabel.swift; sourceTree = "<group>"; };
+		B3DF483D297465AC00668643 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		B3F1C7CA296C323F00CDB9C2 /* TabVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabVC.swift; sourceTree = "<group>"; };
 		B3F1C7CD296C328400CDB9C2 /* SideVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideVC.swift; sourceTree = "<group>"; };
 		B3F1C7CF296C3BAD00CDB9C2 /* SideScreenPresentationAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideScreenPresentationAnimator.swift; sourceTree = "<group>"; };
@@ -246,13 +252,24 @@
 				B36D7F39296D3F21002FF919 /* AddFolderVC.swift */,
 				B3FB703329704B11003E9586 /* PaddedTf.swift */,
 				B3006962297190E200776483 /* AddURLVC.swift */,
+				B3DF483D297465AC00668643 /* WebView.swift */,
 			);
 			path = Screens;
+			sourceTree = "<group>";
+		};
+		B3DF4838297458DA00668643 /* custom */ = {
+			isa = PBXGroup;
+			children = (
+				B3DF48392974590600668643 /* urlCell.swift */,
+				B3DF483B29745EC000668643 /* paddedLabel.swift */,
+			);
+			path = custom;
 			sourceTree = "<group>";
 		};
 		B3F1C7C9296C322200CDB9C2 /* VC */ = {
 			isa = PBXGroup;
 			children = (
+				B3DF4838297458DA00668643 /* custom */,
 				B36D7F38296D3F0B002FF919 /* Screens */,
 				B3F1C7CC296C327400CDB9C2 /* SideVC */,
 				B31C372F28ED49EA00FA3464 /* HomeViewController */,
@@ -446,10 +463,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				B31C371C28ED491400FA3464 /* ViewController.swift in Sources */,
+				B3DF483E297465AC00668643 /* WebView.swift in Sources */,
 				B31C373828ED4B1900FA3464 /* ExtensionsUI.swift in Sources */,
 				B31C373228ED4A2700FA3464 /* InputCard.swift in Sources */,
 				B31C373A28ED4B4E00FA3464 /* Networking.swift in Sources */,
 				B31C371828ED491400FA3464 /* AppDelegate.swift in Sources */,
+				B3DF483A2974590600668643 /* urlCell.swift in Sources */,
 				B31C373428ED4A3000FA3464 /* FolderBar.swift in Sources */,
 				B3F1C7D4296C41D600CDB9C2 /* SideScreenPresentationController.swift in Sources */,
 				B3F1C7CB296C323F00CDB9C2 /* TabVC.swift in Sources */,
@@ -458,6 +477,7 @@
 				B36D7F3A296D3F21002FF919 /* AddFolderVC.swift in Sources */,
 				B32A4F342932496C00726312 /* DBService.swift in Sources */,
 				B3FB703429704B11003E9586 /* PaddedTf.swift in Sources */,
+				B3DF483C29745EC100668643 /* paddedLabel.swift in Sources */,
 				B3F1C7CE296C328400CDB9C2 /* SideVC.swift in Sources */,
 				B3006963297190E200776483 /* AddURLVC.swift in Sources */,
 				B3F1C7D6296C8A6000CDB9C2 /* TabButtons.swift in Sources */,

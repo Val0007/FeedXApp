@@ -9,6 +9,10 @@ import Foundation
 
 import UIKit
 
+protocol FolderBarDelegate{
+    func switchFolder(folder:String)
+}
+
 class FolderBar: UIView {
     
     let stackView = UIStackView()
@@ -16,6 +20,7 @@ class FolderBar: UIView {
     let underLineView = UIView()
     let folders:[String]
     var selectedView:UIView?
+    var delegate:FolderBarDelegate?
 
 
     init(frame: CGRect,f:[String]) {
@@ -45,11 +50,12 @@ class FolderBar: UIView {
     }
 
     @objc func handleTap(_ sender:UITapGestureRecognizer){
-        let v = sender.view
+        guard let v = sender.view else {return}
         selectedView = v
         print(convert(selectedView?.frame.origin ?? CGPoint(x: 0.0, y: 0.0), from: stackView).x)
-        underLineView.frame.origin.x = convert(v?.frame.origin ?? CGPoint(x: 0.0, y: 0.0), from: stackView).x
-
+        underLineView.frame.origin.x = convert(v.frame.origin, from: stackView).x
+        let folder = folders[v.tag]
+        delegate?.switchFolder(folder:folder)
     }
     
     func choseView(){
@@ -66,9 +72,10 @@ class FolderBar: UIView {
         stackView.distribution = .fill
         
         
-        for i in folders {
+        for (ind,i) in folders.enumerated() {
 
             let b = UIView()
+            b.tag = ind
             let label = UILabel()
             label.text = i
             b.addSubview(label)
