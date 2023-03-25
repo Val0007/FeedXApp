@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 
 class ViewController: UIViewController {
@@ -14,9 +15,9 @@ class ViewController: UIViewController {
     let tableView = UITableView()
     let feedArray :[feedItem] = []
     var st:SlideInPresentationManager?
-    let tb = TabButtons()
     let db = SqlDB.shared
     var items:[feedItem] = []
+    let tabBT = TabBt()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,9 +28,12 @@ class ViewController: UIViewController {
         style()
         NotificationManager().status()
         UIApplication.shared.isStatusBarHidden=true; // for status bar hide
-        fetchData(folderName: folders[0])
+        if(!folders.isEmpty){
+            fetchData(folderName: folders[0])
+        }
 
     }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.navigationBar.isHidden = true
@@ -49,8 +53,10 @@ class ViewController: UIViewController {
         tableView.dataSource = self
         tableView.register(urlCell.self, forCellReuseIdentifier: urlCell.identifier)
         
-        view.addSubview(tb)
-        tb.delegate = self
+//        view.addSubview(tb)
+//        tb.delegate = self
+        view.addSubview(tabBT)
+        tabBT.delegate = self
         
 
     }
@@ -114,8 +120,9 @@ class ViewController: UIViewController {
     }
     
     private func style(){
-        tb.centerX(inView: view)
-        tb.anchor(bottom:view.bottomAnchor,paddingBottom: 50,width: view.frame.width * 0.5,height: view.frame.height * 0.1)
+        tableView.separatorStyle = .none
+        tabBT.centerX(inView: view)
+        tabBT.anchor(bottom:view.bottomAnchor,paddingBottom: 60,width: view.frame.width * 0.40,height: view.frame.height * 0.05)
     }
     
 
@@ -147,6 +154,55 @@ extension ViewController:UITableViewDataSource,UITableViewDelegate{
         present(wk, animated: true, completion: nil)
     }
     
+    
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+            let leftAction = UIContextualAction(style: .normal, title:  "Favourite", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
+                print("leftAction tapped")
+                success(true)
+            })
+
+            leftAction.image = UIImage(systemName: "suit.heart.fill")
+        leftAction.backgroundColor = UIColor.twitterBlue
+        
+
+
+            return UISwipeActionsConfiguration(actions: [leftAction])
+        }
+
+        func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+            
+            let rightAction = UIContextualAction(style: .normal, title:  "Read Later", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
+                print("rightAction tapped")
+                success(true)
+            })
+
+            rightAction.image = UIImage(systemName: "bag.fill")
+            rightAction.backgroundColor = UIColor.link
+
+            return UISwipeActionsConfiguration(actions: [rightAction])
+        }
+    
+    func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {
+
+           if let cell = tableView.cellForRow(at: indexPath) as? urlCell{
+               let fr = cell.getFrame()
+               if let spvcell = cell.superview{
+                   for svswipe in spvcell.subviews{
+                       let typeview = type(of: svswipe.self)
+                       if typeview.description() == "UISwipeActionPullView"{
+                           svswipe.frame.size.height = fr.height//size you want
+                           svswipe.frame.origin.y = fr.origin.y
+                       }
+                   }
+               }
+           }
+       }
+    
+    
+    
+
+    
 }
 
 
@@ -171,12 +227,17 @@ extension ViewController:SideVCPush{
         case .df:
             return
         case .du:
+            self.navigationController?.pushViewController(DeleteURLVC(), animated: true)
             return
         case .f:
             return
         case .rl:
             return
         }
+    }
+    
+    func willpop() {
+        tabBT.handleHome()
     }
 }
 
@@ -185,4 +246,32 @@ extension ViewController:FolderBarDelegate{
         self.items = []
         fetchData(folderName: folder)
     }
+    
+    
+
+}
+
+extension UITableViewCell {
+
+   var cellActionPullView: UIView? {
+    superview?.subviews
+     .filter{ String(describing: $0).range(of: "UISwipeActionPullView") != nil }
+     .compactMap { $0 }.first
+   }
+    
+
+   func setRemoveSwipeAction() {
+    
+    if let cellActionPullView = cellActionPullView {
+        // Modify the top and bottom constraints of the swipe action pull view
+        cellActionPullView.snp.updateConstraints { make in
+            make.top.equalTo(self.snp.top).offset(15)
+            make.bottom.equalTo(self.snp.bottom).inset(15)
+        }
+        
+        // Update the layout to reflect the constraint changes
+        self.layoutIfNeeded()
+    }
+
+}
 }

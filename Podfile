@@ -8,5 +8,7 @@ target 'FeedX' do
   # Pods for FeedX
   pod 'DropDown'
   pod 'SQLite.swift', '~> 0.14.1'
+  pod 'SnapKit', '~> 5.6.0'
+
 
 end

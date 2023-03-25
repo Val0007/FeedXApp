@@ -1,3 +1,4 @@
 ${PODS_ROOT}/Target Support Files/Pods-FeedX/Pods-FeedX-frameworks.sh
 ${BUILT_PRODUCTS_DIR}/DropDown/DropDown.framework
 ${BUILT_PRODUCTS_DIR}/SQLite.swift/SQLite.framework
+${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework

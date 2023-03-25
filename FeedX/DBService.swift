@@ -289,4 +289,21 @@ class SqlDB{
         }
     }
     
+    
+    func deleteURL(url:String)->Bool{
+        do{
+            guard let db = SqlDB.shared.database else {return false}
+            
+            let q = try db.prepare("DELETE FROM LINK WHERE URL = (?)")
+            let values = [url]
+            try q.run(values)
+            return true
+            
+        }
+        catch{
+            print(error)
+            return false
+        }
+    }
+    
 }

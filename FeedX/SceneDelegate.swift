@@ -13,6 +13,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
 
+
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
 
         guard let scene = (scene as? UIWindowScene) else { return }
@@ -20,6 +21,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.makeKeyAndVisible()
         window.rootViewController = UINavigationController(rootViewController: ViewController())
         self.window = window
+        
+        if #available(iOS 13.0, *) {
+            window.overrideUserInterfaceStyle = .light
+        }
     }
         
     

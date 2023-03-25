@@ -9,6 +9,7 @@ import UIKit
 
 protocol SideVCPush{
     func pushVC(type:types)
+    func willpop()
 }
 
 enum types:String,CaseIterable{
@@ -34,7 +35,11 @@ class SideVC: UIViewController {
         UIImage(systemName: "suit.heart.fill")!:.f,
         UIImage(systemName: "bag.fill")!:.rl,
     ]
-
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        delegate?.willpop()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         layout()
