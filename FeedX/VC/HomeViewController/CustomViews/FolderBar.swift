@@ -21,6 +21,7 @@ class FolderBar: UIView {
     let folders:[String]
     var selectedView:UIView?
     var delegate:FolderBarDelegate?
+    var currentFolder:String?
 
 
     init(frame: CGRect,f:[String]) {
@@ -54,8 +55,8 @@ class FolderBar: UIView {
         selectedView = v
         print(convert(selectedView?.frame.origin ?? CGPoint(x: 0.0, y: 0.0), from: stackView).x)
         underLineView.frame.origin.x = convert(v.frame.origin, from: stackView).x
-        let folder = folders[v.tag]
-        delegate?.switchFolder(folder:folder)
+        currentFolder = folders[v.tag]
+        delegate?.switchFolder(folder:currentFolder ?? "")
     }
     
     func choseView(){

@@ -29,6 +29,7 @@ class DeleteURLVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.navigationBar.isHidden = false
+        self.title = "Delete URL"
     }
     
 
@@ -93,6 +94,10 @@ extension DeleteURLVC:UITableViewDataSource,UITableViewDelegate{
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        let celltype = cellData.items[indexPath.row]
+        if celltype is SwiftyAccordionCells.HeaderItem{
+            return false
+        }
         return true
     }
     

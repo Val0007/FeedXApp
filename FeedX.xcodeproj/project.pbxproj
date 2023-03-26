@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		8F2C19048C8692CEF59C6C46 /* Pods_FeedX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F359CC190ACF347922FD235 /* Pods_FeedX.framework */; };
 		B3006963297190E200776483 /* AddURLVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3006962297190E200776483 /* AddURLVC.swift */; };
+		B315730F29D01E29001B685A /* DisplaySavedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B315730E29D01E29001B685A /* DisplaySavedVC.swift */; };
+		B315731129D0240E001B685A /* webVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B315731029D0240E001B685A /* webVC.swift */; };
 		B31C371828ED491400FA3464 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31C371728ED491400FA3464 /* AppDelegate.swift */; };
 		B31C371A28ED491400FA3464 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31C371928ED491400FA3464 /* SceneDelegate.swift */; };
 		B31C371C28ED491400FA3464 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31C371B28ED491400FA3464 /* ViewController.swift */; };
@@ -105,6 +107,8 @@
 		06B15C612D4C2EF5F90F9CAA /* Pods-FeedX.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FeedX.debug.xcconfig"; path = "Target Support Files/Pods-FeedX/Pods-FeedX.debug.xcconfig"; sourceTree = "<group>"; };
 		6F359CC190ACF347922FD235 /* Pods_FeedX.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FeedX.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3006962297190E200776483 /* AddURLVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddURLVC.swift; sourceTree = "<group>"; };
+		B315730E29D01E29001B685A /* DisplaySavedVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplaySavedVC.swift; sourceTree = "<group>"; };
+		B315731029D0240E001B685A /* webVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = webVC.swift; sourceTree = "<group>"; };
 		B31C371428ED491400FA3464 /* FeedX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FeedX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B31C371728ED491400FA3464 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B31C371928ED491400FA3464 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -257,6 +261,7 @@
 				B3006962297190E200776483 /* AddURLVC.swift */,
 				B3DF483D297465AC00668643 /* WebView.swift */,
 				B34A206F29C4372000D90334 /* DeleteURLVC.swift */,
+				B315730E29D01E29001B685A /* DisplaySavedVC.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -266,6 +271,7 @@
 			children = (
 				B3DF48392974590600668643 /* urlCell.swift */,
 				B3DF483B29745EC000668643 /* paddedLabel.swift */,
+				B315731029D0240E001B685A /* webVC.swift */,
 			);
 			path = custom;
 			sourceTree = "<group>";
@@ -472,6 +478,7 @@
 				B34A207029C4372000D90334 /* DeleteURLVC.swift in Sources */,
 				B31C373A28ED4B4E00FA3464 /* Networking.swift in Sources */,
 				B31C371828ED491400FA3464 /* AppDelegate.swift in Sources */,
+				B315731129D0240E001B685A /* webVC.swift in Sources */,
 				B3DF483A2974590600668643 /* urlCell.swift in Sources */,
 				B31C373428ED4A3000FA3464 /* FolderBar.swift in Sources */,
 				B3F1C7D4296C41D600CDB9C2 /* SideScreenPresentationController.swift in Sources */,
@@ -488,6 +495,7 @@
 				B36AF38A2932913400124182 /* NotificationService.swift in Sources */,
 				B34A207229C43F5B00D90334 /* CellModel.swift in Sources */,
 				B31C371A28ED491400FA3464 /* SceneDelegate.swift in Sources */,
+				B315730F29D01E29001B685A /* DisplaySavedVC.swift in Sources */,
 				B3F1C7D2296C40C700CDB9C2 /* SlideScreenTransitionDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

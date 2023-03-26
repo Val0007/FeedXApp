@@ -31,7 +31,9 @@ class ViewController: UIViewController {
         if(!folders.isEmpty){
             fetchData(folderName: folders[0])
         }
-
+        print("Articles is")
+        db.getArticles(type: .readlater)
+//        db.dropTable()
     }
     
     
@@ -150,14 +152,23 @@ extension ViewController:UITableViewDataSource,UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item = items[indexPath.row]
-        let wk = WebView(s: item.feedItemLink)
-        present(wk, animated: true, completion: nil)
+        let wk = WebViewController(u: item.feedItemLink)
+        self.navigationController?.pushViewController(wk, animated: true)
     }
     
     
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
             let leftAction = UIContextualAction(style: .normal, title:  "Favourite", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-                print("leftAction tapped")
+                let article = self.items[indexPath.row]
+                self.db.insertElement(type: .Article(article.feedItemTitle, article.feedItemLink, article.feedItemDesc, article.feedItemDate, article.feedPublisher, article.folder,.fav)) { comp in
+                    
+                    if comp{
+                        print("INSERTED")
+                    }
+                    else{
+                        print("EXISTS")
+                    }
+                }
                 success(true)
             })
 
@@ -173,7 +184,16 @@ extension ViewController:UITableViewDataSource,UITableViewDelegate{
         
             
             let rightAction = UIContextualAction(style: .normal, title:  "Read Later", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-                print("rightAction tapped")
+                let article = self.items[indexPath.row]
+                self.db.insertElement(type: .Article(article.feedItemTitle, article.feedItemLink, article.feedItemDesc, article.feedItemDate, article.feedPublisher,self.folderBar?.currentFolder ?? "",.readlater)) { comp in
+                    
+                    if comp{
+                        print("INSERTED")
+                    }
+                    else{
+                        print("EXISTS")
+                    }
+                }
                 success(true)
             })
 
@@ -230,8 +250,10 @@ extension ViewController:SideVCPush{
             self.navigationController?.pushViewController(DeleteURLVC(), animated: true)
             return
         case .f:
+            self.navigationController?.pushViewController(DisplaySavedVC(t: .fav), animated: true)
             return
         case .rl:
+            self.navigationController?.pushViewController(DisplaySavedVC(t: .readlater), animated: true)
             return
         }
     }
@@ -251,27 +273,4 @@ extension ViewController:FolderBarDelegate{
 
 }
 
-extension UITableViewCell {
 
-   var cellActionPullView: UIView? {
-    superview?.subviews
-     .filter{ String(describing: $0).range(of: "UISwipeActionPullView") != nil }
-     .compactMap { $0 }.first
-   }
-    
-
-   func setRemoveSwipeAction() {
-    
-    if let cellActionPullView = cellActionPullView {
-        // Modify the top and bottom constraints of the swipe action pull view
-        cellActionPullView.snp.updateConstraints { make in
-            make.top.equalTo(self.snp.top).offset(15)
-            make.bottom.equalTo(self.snp.bottom).inset(15)
-        }
-        
-        // Update the layout to reflect the constraint changes
-        self.layoutIfNeeded()
-    }
-
-}
-}
