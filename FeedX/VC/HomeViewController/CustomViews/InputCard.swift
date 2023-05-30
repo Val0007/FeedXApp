@@ -14,19 +14,20 @@ protocol InputDelegate{
     func addurl(link:InsertType)
 }
 
-class InputCard: UIView {
+class InputCard: UIView, UITextViewDelegate {
     
     let container = UIView()
     let foldername = UIView()
-    let urlInput = UITextField()
-    let publisherInput = UITextField()
+    let urlInput = UITextView()
+    let publisherInput = PaddedTf()
     let button = UIButton()
     let containerPadding:CGFloat = 8.0
     let dropDown = DropDown()
-    let foldernameText = UILabel()
+    let foldernameText = paddedLabel()
     let folders:[String]
     var delegate:InputDelegate?
-    
+    var urlInputHeight:NSLayoutConstraint?
+    var changeHeight:Bool = false
      init(frame: CGRect,f:[String]) {
         folders = f
         super.init(frame: frame)
@@ -78,6 +79,8 @@ class InputCard: UIView {
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleFolder))
         foldername.addGestureRecognizer(tap)
         
+
+        
     }
     private func style(){
         //container.backgroundColor = .white
@@ -89,18 +92,18 @@ class InputCard: UIView {
         foldernameText.textColor = .black
         foldernameText.font = UIFont.systemFont(ofSize: 18)
         foldernameText.text = "Click to select"
-        foldernameText.backgroundColor = .yellow
+        foldernameText.backgroundColor = .white
+        foldername.layer.masksToBounds = true
 
 
-
-        urlInput.backgroundColor  = .systemGray6
+        urlInput.backgroundColor  = .white
         urlInput.layer.borderWidth = 0.5
         urlInput.layer.borderColor = UIColor.black.cgColor
-        urlInput.placeholder  = "Paste URL"
         urlInput.font = UIFont.systemFont(ofSize: 18)
         urlInput.layer.cornerRadius = 5
+        urlInput.text = "Enter URL"
         
-        publisherInput.backgroundColor  = .systemGray6
+        publisherInput.backgroundColor  = .white
         publisherInput.layer.borderWidth = 0.5
         publisherInput.layer.borderColor = UIColor.black.cgColor
         publisherInput.placeholder  = "Publisher Name"
@@ -114,6 +117,12 @@ class InputCard: UIView {
         button.addTarget(self, action: #selector(handleAdd), for: .touchUpInside)
         
  
+        DropDown.appearance().textColor = UIColor.black
+        DropDown.appearance().textFont = UIFont.systemFont(ofSize: 16)
+        DropDown.appearance().backgroundColor = UIColor.white
+        DropDown.appearance().selectionBackgroundColor = UIColor.lightGray
+        DropDown.appearance().cellHeight = 60
+        DropDown.appearance().setupCornerRadius(10)
 
         
     }
@@ -124,12 +133,29 @@ class InputCard: UIView {
         foldernameText.addConstraintsToFillView(foldername)
         foldername.backgroundColor = .red
         foldernameText.textAlignment = .left
-        
-        urlInput.anchor(top: foldername.bottomAnchor, left: leftAnchor,right: rightAnchor, paddingTop: containerPadding*3, paddingLeft: containerPadding, paddingRight: containerPadding,height: frame.height * 0.18)
+         
+        urlInput.anchor(top: foldername.bottomAnchor, left: leftAnchor,right: rightAnchor, paddingTop: containerPadding*3, paddingLeft: containerPadding, paddingRight: containerPadding)
+
+
+
         
         publisherInput.anchor(top: urlInput.bottomAnchor, left: leftAnchor,right: rightAnchor, paddingTop: containerPadding*3, paddingLeft: containerPadding, paddingRight: containerPadding,height: frame.height * 0.18)
         
         button.anchor(left: leftAnchor,bottom: bottomAnchor,right: rightAnchor, paddingTop: containerPadding*3, paddingLeft: containerPadding, paddingBottom: containerPadding * 2,paddingRight: containerPadding,height: frame.height * 0.2)
+        
+        if !changeHeight{
+            urlInputHeight?.isActive = false
+            urlInputHeight = urlInput.heightAnchor.constraint(equalToConstant: frame.height * 0.18)
+            urlInputHeight?.isActive = true
+        }
+        else{
+            urlInputHeight?.isActive = false
+            urlInputHeight = urlInput.heightAnchor.constraint(equalToConstant: frame.height * 0.25)
+            urlInputHeight?.isActive = true
+            publisherInput.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.14).isActive = true
+            button.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.16).isActive = true
+
+        }
         
         layoutIfNeeded()
         dropDown.anchorView = foldername
@@ -144,69 +170,6 @@ class InputCard: UIView {
 }
 
 
-//ANIMATION
-extension InputCard{
-    
-    func animation(){
-        let layer : CAShapeLayer = CAShapeLayer()
-        layer.strokeColor = UIColor.gray.cgColor
-        layer.lineWidth = 3.0
-        layer.fillColor = UIColor.clear.cgColor
-
-        
-        let path2 = UIBezierPath()
-        path2.move(to: CGPoint(x: 0,y: container.frame.height/2))
-        path2.addLine(to: CGPoint(x: 0, y: 0))
-        path2.addLine(to: CGPoint(x: container.frame.width, y: 0))
-        path2.addLine(to: CGPoint(x: container.frame.width, y: container.frame.height))
-        path2.addLine(to: CGPoint(x: 0, y: container.frame.height))
-        path2.close()
-        
-        layer.path = path2.cgPath
-
-        let animation : CABasicAnimation = CABasicAnimation(keyPath: "strokeEnd")
-        animation.fromValue = 0.0
-        animation.toValue = 1.0
-        animation.repeatCount = .infinity
-        animation.isRemovedOnCompletion = false
-        
-        let lineWidthAnimation = CABasicAnimation(keyPath: "lineWidth")
-        lineWidthAnimation.fromValue = 1
-        lineWidthAnimation.toValue = 3
-        lineWidthAnimation.duration = 0.2
-        lineWidthAnimation.repeatCount = .infinity
-        
-        let fadeAnimation = CABasicAnimation(keyPath: "opacity")
-        fadeAnimation.fromValue = 1
-        fadeAnimation.toValue = 0
-        fadeAnimation.repeatCount = .infinity
-
-        animation.duration = 5.0
-        fadeAnimation.duration = 5.1
-        
-//        let movingLayer = CAShapeLayer()
-//        movingLayer.fillColor = UIColor.green.cgColor
-//        movingLayer.path = path2.cgPath
-//        movingLayer.bounds = CGRect(x: 0, y: 0, width: 10.0, height: 10.0)
-//        movingLayer.masksToBounds = true
-//
-//        let manimation = CAKeyframeAnimation(keyPath: #keyPath(CALayer.position))
-//        manimation.duration = 5
-//        manimation.repeatCount = MAXFLOAT
-//        manimation.path = path2.cgPath
-//        movingLayer.add(manimation,forKey: "ddds")
-    
-
-        layer.add(animation, forKey: "myStroke")
-        layer.add(fadeAnimation, forKey: "i")
-        layer.add(lineWidthAnimation,forKey: "")
-        self.container.layer.addSublayer(layer)
-        //self.container.layer.addSublayer(movingLayer)
-    }
-
-}
-
-
 extension InputCard:UITextFieldDelegate{
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
@@ -214,4 +177,45 @@ extension InputCard:UITextFieldDelegate{
         publisherInput.resignFirstResponder()
         return true
     }
+    
+    
+    
+    //urlinput
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == UIPasteboard.general.string{
+            urlInputHeight?.isActive  = false
+            print( UIPasteboard.general.string!)
+            let h = UIPasteboard.general.string!.height(withConstrainedWidth: urlInput.frame.width)
+            print("height is ",h,urlInputHeight?.constant)
+            if h > urlInputHeight!.constant {
+                let diff = h - urlInputHeight!.constant
+                print("change height")
+                changeHeight = true
+                layoutIfNeeded()
+            }
+        }
+
+         return true
+    }
+    
+    
+    func getHeight(text: String) -> CGFloat
+   {
+       let txtField = UITextField(frame: .zero)
+       txtField.text = text
+       txtField.sizeToFit()
+       return txtField.frame.size.height
+   }
+    
 }
+
+extension String {
+    func height(withConstrainedWidth width: CGFloat, font: UIFont = .systemFont(ofSize: 16, weight: .regular)) -> CGFloat {
+        let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
+        let boundingBox = self.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [.font: font], context: nil)
+    
+        return ceil(boundingBox.height)
+    }
+
+}
+
