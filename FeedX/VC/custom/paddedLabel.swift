@@ -18,8 +18,9 @@ class paddedLabel: UILabel {
   let insets: UIEdgeInsets = UIEdgeInsets(top: topInset, left: leftInset, bottom: bottomInset, right: rightInset)
         super.drawText(in: rect.inset(by: insets))
 
-
  }
+    
+//    rect is passed to the superclass's implementation of drawText(in:) using the super keyword. This ensures that the label's text is drawn within the padded area, as specified by the modified rect. The superclass implementation takes care of the actual text rendering, respecting the adjusted drawing area.
     
     override var intrinsicContentSize: CGSize{
         var intrinsicSuperViewContentSize = super.intrinsicContentSize
@@ -27,5 +28,5 @@ class paddedLabel: UILabel {
      intrinsicSuperViewContentSize.width += leftInset + rightInset
      return intrinsicSuperViewContentSize
     }
-    
+    //change frame size
 }

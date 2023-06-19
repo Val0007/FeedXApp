@@ -11,28 +11,32 @@ import SnapKit
 
 class ViewController: UIViewController {
     
-    var folderBar:FolderBar?
+    //var folderBar:FolderBar?
     let tableView = UITableView()
-    let feedArray :[feedItem] = []
     var st:SlideInPresentationManager?
     let db = SqlDB.shared
     var items:[feedItem] = []
-    let tabBT = TabBt()
+    let tabBT = TabBt() //bottom tab bar
+    let cv = UICollectionView(frame: .zero, collectionViewLayout: createHorizontalFlowLayout())
+    var selectedIndex = 0
+    var folderNames:[String] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let folders = db.getFolders()
-        folderBar = FolderBar(frame: .zero, f: folders)
+        //let folders = db.getFolders()
+        //folderBar = FolderBar(frame: .zero, f: folders)
+        
         setup()
         layout()
         style()
         NotificationManager().status()
         UIApplication.shared.isStatusBarHidden=true; // for status bar hide
-        if(!folders.isEmpty){
-            fetchData(folderName: folders[0])
+        folderNames = db.getFolders()
+        if(!folderNames.isEmpty){
+            fetchData(folderName: folderNames[0])
         }
-        print("Articles is")
-        db.getArticles(type: .readlater)
+        cv.reloadData()
+        tableView.reloadData()
 //        db.dropTable()
     }
     
@@ -44,23 +48,57 @@ class ViewController: UIViewController {
     private func setup(){
         self.navigationController?.navigationBar.isHidden = true
         view.backgroundColor = .white
-        guard let folderBar = folderBar else {
-            return
-        }
-        folderBar.delegate = self
-        view.addSubview(folderBar)
+//        guard let folderBar = folderBar else {
+//            return
+//        }
+//        folderBar.delegate = self
+//        view.addSubview(folderBar)
+        
+        
+//        view.addSubview(tb)
+//        tb.delegate = self
+        
+        
+        //collectionview
+        view.addSubview(cv)
+        cv.dataSource = self
+        cv.delegate = self
+        cv.showsHorizontalScrollIndicator = false
+        cv.register(folderNameCell.self, forCellWithReuseIdentifier: "foldercollCell")
         
         view.addSubview(tableView)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(urlCell.self, forCellReuseIdentifier: urlCell.identifier)
-        
-//        view.addSubview(tb)
-//        tb.delegate = self
+
         view.addSubview(tabBT)
         tabBT.delegate = self
-        
 
+        
+        print(view.subviews)
+
+    }
+    
+    private func layout(){
+//        guard let folderBar = folderBar else {
+//            return
+//        }
+
+//        folderBar.anchor(top:view.safeAreaLayoutGuide.topAnchor,left: view.safeAreaLayoutGuide.leftAnchor,right: view.safeAreaLayoutGuide.rightAnchor,height: view.frame.height * 0.08)
+        
+        cv.translatesAutoresizingMaskIntoConstraints = false
+        cv.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        cv.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.07).isActive  = true
+        cv.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 1).isActive = true
+
+        
+        tableView.anchor(top: cv.bottomAnchor, left: view.safeAreaLayoutGuide.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.safeAreaLayoutGuide.rightAnchor)
+    }
+    
+    private func style(){
+        tableView.separatorStyle = .none
+        tabBT.centerX(inView: view)
+        tabBT.anchor(bottom:view.bottomAnchor,paddingBottom: 60,width: view.frame.width * 0.40,height: view.frame.height * 0.05)
     }
     
     private func fetchData(folderName:String){
@@ -111,21 +149,7 @@ class ViewController: UIViewController {
         appearance.titleTextAttributes = titleAttribute
     }
     
-    private func layout(){
-        guard let folderBar = folderBar else {
-            return
-        }
 
-        folderBar.anchor(top:view.safeAreaLayoutGuide.topAnchor,left: view.safeAreaLayoutGuide.leftAnchor,right: view.safeAreaLayoutGuide.rightAnchor,height: view.frame.height * 0.08)
-        
-        tableView.anchor(top: folderBar.bottomAnchor, left: view.safeAreaLayoutGuide.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.safeAreaLayoutGuide.rightAnchor)
-    }
-    
-    private func style(){
-        tableView.separatorStyle = .none
-        tabBT.centerX(inView: view)
-        tabBT.anchor(bottom:view.bottomAnchor,paddingBottom: 60,width: view.frame.width * 0.40,height: view.frame.height * 0.05)
-    }
     
 
 
@@ -185,7 +209,7 @@ extension ViewController:UITableViewDataSource,UITableViewDelegate{
             
             let rightAction = UIContextualAction(style: .normal, title:  "Read Later", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
                 let article = self.items[indexPath.row]
-                self.db.insertElement(type: .Article(article.feedItemTitle, article.feedItemLink, article.feedItemDesc, article.feedItemDate, article.feedPublisher,self.folderBar?.currentFolder ?? "",.readlater)) { comp in
+                self.db.insertElement(type: .Article(article.feedItemTitle, article.feedItemLink, article.feedItemDesc, article.feedItemDate, article.feedPublisher,self.folderNames[self.selectedIndex],.readlater)) { comp in
                     
                     if comp{
                         print("INSERTED")
@@ -273,4 +297,51 @@ extension ViewController:FolderBarDelegate{
 
 }
 
+extension ViewController:UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout{
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return folderNames.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = cv.dequeueReusableCell(withReuseIdentifier: "foldercollCell", for: indexPath) as! folderNameCell
+        cell.update(label: folderNames[indexPath.row])
+        if selectedIndex == indexPath.row{
+            cell.toggle(value:true)
+        }
+        else{
+            cell.toggle(value: false)
+        }
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let oldCell = cv.cellForItem(at: IndexPath(row: selectedIndex, section: 0)) as! folderNameCell
+        oldCell.toggle(value: false)
+        selectedIndex = indexPath.row
+        let newCell = cv.cellForItem(at: IndexPath(row: selectedIndex, section: 0)) as! folderNameCell
+        newCell.toggle(value: true)
+        switchFolder(folder: folderNames[indexPath.row])
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let screenWidth = collectionView.bounds.width
+        let cellWidth = screenWidth / 4 // Divide the screen width by the number of cells you want in a row
+        let cellHeight: CGFloat = collectionView.bounds.height * 0.8 // Set the height to your desired value
+        
+        return CGSize(width: cellWidth, height: cellHeight)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+           return UIEdgeInsets(top: 0, left: 8, bottom: 5, right: 8)
+        }
+    
+    
+}
 
+
+
+func createHorizontalFlowLayout() -> UICollectionViewFlowLayout {
+    let layout = UICollectionViewFlowLayout()
+    layout.scrollDirection = .horizontal
+    return layout
+}
