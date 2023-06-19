@@ -39,7 +39,8 @@ class Networking:NSObject,XMLParserDelegate{
     var cv:String = ""
     
     func getData(urlP:String,pubL:String,completion:@escaping([feedItem])->()){
-        guard let url = URL(string: urlP) else {return}
+        let urll = urlP.replacingOccurrences(of: "\\s+", with: "", options: .regularExpression, range: nil)
+        guard let url = URL(string: urll) else {return}
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data, error == nil else {
                 print(error ?? "Unknown error")

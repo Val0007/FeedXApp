@@ -32,6 +32,8 @@ class InputCard: UIView, UITextViewDelegate {
         folders = f
         super.init(frame: frame)
         setup()
+        style()
+
 
     }
     
@@ -42,7 +44,6 @@ class InputCard: UIView, UITextViewDelegate {
     //why?
     override func layoutSubviews() {
         layout()
-        style()
 
     }
     
@@ -182,6 +183,14 @@ extension InputCard:UITextFieldDelegate{
     
     //urlinput
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        
+        if text == "\n"{
+            textView.resignFirstResponder()
+            urlInput.resignFirstResponder()
+            publisherInput.resignFirstResponder()
+            return false
+        }
+        
         if text == UIPasteboard.general.string{
             urlInputHeight?.isActive  = false
             print( UIPasteboard.general.string!)
@@ -197,6 +206,8 @@ extension InputCard:UITextFieldDelegate{
 
          return true
     }
+    
+    
     
     
     func getHeight(text: String) -> CGFloat

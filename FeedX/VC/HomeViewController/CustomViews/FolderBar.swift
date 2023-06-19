@@ -18,6 +18,7 @@ class FolderBar: UIView {
     let stackView = UIStackView()
     let scrollView = UIScrollView()
     let underLineView = UIView()
+    let rightView = UIView()
     let folders:[String]
     var selectedView:UIView?
     var delegate:FolderBarDelegate?
@@ -43,8 +44,8 @@ class FolderBar: UIView {
         print(stackView.frame)
         print(scrollView.frame)
         underLineView.frame.origin.x = stackView.frame.origin.x + 8
-        underLineView.frame.origin.y = stackView.frame.origin.y + stackView.frame.height + 10
-        underLineView.backgroundColor = .gray
+        underLineView.frame.origin.y = stackView.frame.origin.y + stackView.frame.height + 2
+        underLineView.backgroundColor = .black
         
         roundCorners([.bottomLeft,.bottomRight], radius: 16)
 
@@ -54,7 +55,10 @@ class FolderBar: UIView {
         guard let v = sender.view else {return}
         selectedView = v
         print(convert(selectedView?.frame.origin ?? CGPoint(x: 0.0, y: 0.0), from: stackView).x)
-        underLineView.frame.origin.x = convert(v.frame.origin, from: stackView).x
+        UIView.animate(withDuration: 0.2) {
+            self.underLineView.frame.origin.x = self.convert(v.frame.origin, from: self.stackView).x
+            self.layoutIfNeeded()
+        }
         currentFolder = folders[v.tag]
         delegate?.switchFolder(folder:currentFolder ?? "")
     }
@@ -83,6 +87,19 @@ class FolderBar: UIView {
             label.addConstraintsToFillView(b)
             label.textAlignment = .center
             label.textColor = .black
+            label.adjustsFontSizeToFitWidth = true
+            label.numberOfLines = 0
+            label.font = .systemFont(ofSize: 14, weight: .bold)
+            
+            let rightView = UIView()
+            rightView.translatesAutoresizingMaskIntoConstraints = false
+            label.addSubview(rightView)
+            rightView.heightAnchor.constraint(equalTo: label.heightAnchor, multiplier: 0.6).isActive = true
+            rightView.widthAnchor.constraint(equalToConstant: 1).isActive = true
+            rightView.backgroundColor = .black.withAlphaComponent(0.2)
+            rightView.rightAnchor.constraint(equalTo: label.rightAnchor,constant: 0).isActive = true
+            rightView.centerYAnchor.constraint(equalTo: label.centerYAnchor).isActive = true
+            
             stackView.addArrangedSubview(b)
             //b.backgroundColor = .darkGray
             let tap = UITapGestureRecognizer(target: self, action:#selector(handleTap))
