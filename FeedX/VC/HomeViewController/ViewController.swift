@@ -20,6 +20,7 @@ class ViewController: UIViewController {
     let cv = UICollectionView(frame: .zero, collectionViewLayout: createHorizontalFlowLayout())
     var selectedIndex = 0
     var folderNames:[String] = []
+    let bottomBar = BottomBar()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,12 +72,11 @@ class ViewController: UIViewController {
         tableView.dataSource = self
         tableView.register(urlCell.self, forCellReuseIdentifier: urlCell.identifier)
 
-        view.addSubview(tabBT)
-        tabBT.delegate = self
+//        view.addSubview(tabBT)
+//        tabBT.delegate = self
 
-        
-        print(view.subviews)
-
+        view.addSubview(bottomBar)
+        bottomBar.delegate = self
     }
     
     private func layout(){
@@ -93,12 +93,20 @@ class ViewController: UIViewController {
 
         
         tableView.anchor(top: cv.bottomAnchor, left: view.safeAreaLayoutGuide.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.safeAreaLayoutGuide.rightAnchor)
+        
+        bottomBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30).isActive = true
+        bottomBar.centerX(inView: view)
+        bottomBar.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.5).isActive = true
+        bottomBar.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.05).isActive = true
+
     }
     
     private func style(){
         tableView.separatorStyle = .none
-        tabBT.centerX(inView: view)
-        tabBT.anchor(bottom:view.bottomAnchor,paddingBottom: 60,width: view.frame.width * 0.40,height: view.frame.height * 0.05)
+//        tabBT.centerX(inView: view)
+//        tabBT.anchor(bottom:view.bottomAnchor,paddingBottom: 60,width: view.frame.width * 0.40,height: view.frame.height * 0.05)
+
+        
     }
     
     private func fetchData(folderName:String){
@@ -283,7 +291,8 @@ extension ViewController:SideVCPush{
     }
     
     func willpop() {
-        tabBT.handleHome()
+//        tabBT.handleHome()
+        bottomBar.handleHome()
     }
 }
 

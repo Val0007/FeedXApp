@@ -23,6 +23,7 @@
 		B31C373A28ED4B4E00FA3464 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31C373928ED4B4E00FA3464 /* Networking.swift */; };
 		B3209CCA29334A5B00945D64 /* operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3209CC929334A5A00945D64 /* operation.swift */; };
 		B32543E12A40AB76004B296E /* folderNameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B32543E02A40AB76004B296E /* folderNameCell.swift */; };
+		B32543E52A40CE8E004B296E /* BottomBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B32543E42A40CE8E004B296E /* BottomBar.swift */; };
 		B32A4F342932496C00726312 /* DBService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B32A4F332932496C00726312 /* DBService.swift */; };
 		B34A207029C4372000D90334 /* DeleteURLVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B34A206F29C4372000D90334 /* DeleteURLVC.swift */; };
 		B34A207229C43F5B00D90334 /* CellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B34A207129C43F5B00D90334 /* CellModel.swift */; };
@@ -125,6 +126,7 @@
 		B31C373928ED4B4E00FA3464 /* Networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		B3209CC929334A5A00945D64 /* operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = operation.swift; sourceTree = "<group>"; };
 		B32543E02A40AB76004B296E /* folderNameCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = folderNameCell.swift; sourceTree = "<group>"; };
+		B32543E42A40CE8E004B296E /* BottomBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomBar.swift; sourceTree = "<group>"; };
 		B32A4F332932496C00726312 /* DBService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBService.swift; sourceTree = "<group>"; };
 		B32A4F652932508500726312 /* SQLite.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SQLite.xcodeproj; path = "../../../Downloads/SQLite.swift-swift-5.7/SQLite.xcodeproj"; sourceTree = "<group>"; };
 		B32A4F872932538400726312 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
@@ -278,6 +280,7 @@
 				B315731029D0240E001B685A /* webVC.swift */,
 				B37DA7512A2515560023CDFB /* deleteCell.swift */,
 				B32543E02A40AB76004B296E /* folderNameCell.swift */,
+				B32543E42A40CE8E004B296E /* BottomBar.swift */,
 			);
 			path = custom;
 			sourceTree = "<group>";
@@ -488,6 +491,7 @@
 				B315731129D0240E001B685A /* webVC.swift in Sources */,
 				B3DF483A2974590600668643 /* urlCell.swift in Sources */,
 				B31C373428ED4A3000FA3464 /* FolderBar.swift in Sources */,
+				B32543E52A40CE8E004B296E /* BottomBar.swift in Sources */,
 				B3F1C7D4296C41D600CDB9C2 /* SideScreenPresentationController.swift in Sources */,
 				B3F1C7D0296C3BAD00CDB9C2 /* SideScreenPresentationAnimator.swift in Sources */,
 				B31C372228ED491400FA3464 /* FeedX.xcdatamodeld in Sources */,
