@@ -7,14 +7,7 @@
 
 import UIKit
 
-enum page{
-    case Home
-    case Options
-}
 
-protocol tabButtonClick{
-    func changePage(page:page)
-}
 
 
 class TabBt: UIView {

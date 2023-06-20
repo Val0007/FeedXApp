@@ -7,14 +7,27 @@
 
 import UIKit
 
+enum page{
+    case Home
+    case Options
+}
+
+protocol tabButtonClick{
+    func changePage(page:page)
+    func pubFilter(pubName:String)
+    func pubAll()
+}
+
 class BottomBar: UIView {
     
     let stackview = UIStackView()
-    let homeLabel = paddedLabel()
+    let homeLabel = UIButton()
     let foldersLabel = paddedLabel()
     let selectorView = UIView()
     var leftAnchorForSelector:NSLayoutConstraint?
     var delegate:tabButtonClick?
+    var filterMenu:UIMenu?
+    var pubNames:[String] = []
 
 
     override init(frame: CGRect) {
@@ -30,22 +43,23 @@ class BottomBar: UIView {
         addSubview(stackview)
         stackview.distribution = .fillEqually
         stackview.axis = .horizontal
+        stackview.addSubview(selectorView)
         stackview.addArrangedSubview(homeLabel)
         stackview.addArrangedSubview(foldersLabel)
-        homeLabel.text = "Home"
-        homeLabel.textColor = .black
+        homeLabel.setTitleColor(.black, for: .normal)
         foldersLabel.textColor = .black
         foldersLabel.text = "Folders"
-        homeLabel.textAlignment = .center
+        homeLabel.setAttributedTitle(buttonTitleAttr(), for: .normal)
+//        homeLabel.textAlignment = .center
         foldersLabel.textAlignment = .center
-        homeLabel.font = .systemFont(ofSize: 16, weight: .bold)
-        foldersLabel.font = .systemFont(ofSize: 16, weight: .bold)
+//        homeLabel.font = .systemFont(ofSize: 14, weight: .bold)
+        foldersLabel.font = .systemFont(ofSize: 14, weight: .bold)
         stackview.isUserInteractionEnabled = true
         foldersLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleFolder(_:))))
         homeLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleHome(_:))))
         foldersLabel.isUserInteractionEnabled = true
         homeLabel.isUserInteractionEnabled = true
-        stackview.backgroundColor = .gray.withAlphaComponent(0.8)
+        stackview.backgroundColor = .gray.withAlphaComponent(0.5)
         stackview.layer.cornerRadius = 4
         selectorView.layer.cornerRadius = 4
         
@@ -54,7 +68,6 @@ class BottomBar: UIView {
         stackview.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 1).isActive = true
         stackview.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 1).isActive = true
         
-        stackview.addSubview(selectorView)
         selectorView.translatesAutoresizingMaskIntoConstraints = false
         selectorView.heightAnchor.constraint(equalTo: homeLabel.heightAnchor, multiplier: 1).isActive =  true
         selectorView.widthAnchor.constraint(equalTo: homeLabel.widthAnchor, multiplier: 1).isActive = true
@@ -64,6 +77,10 @@ class BottomBar: UIView {
         selectorView.centerY(inView: homeLabel)
         handleHome()
     
+        
+        filterMenu =   UIMenu(title: "Filter", image: nil, identifier: nil, options: [], children: generateMenuOptions())
+        homeLabel.menu = filterMenu
+        
     }
     
     @objc func handleFolder(_ sender: UITapGestureRecognizer? = nil){
@@ -72,7 +89,7 @@ class BottomBar: UIView {
             self.leftAnchorForSelector = self.selectorView.leftAnchor.constraint(equalTo: self.foldersLabel.leftAnchor)
             self.leftAnchorForSelector?.isActive = true
             self.foldersLabel.textColor = .white
-            self.homeLabel.textColor = .black
+            self.homeLabel.setTitleColor(.black, for: .normal)
             self.layoutIfNeeded()
             self.delegate?.changePage(page: .Options)
         }
@@ -85,11 +102,42 @@ class BottomBar: UIView {
             self.leftAnchorForSelector = self.selectorView.leftAnchor.constraint(equalTo: self.homeLabel.leftAnchor)
             self.leftAnchorForSelector?.isActive = true
             self.foldersLabel.textColor = .black
-            self.homeLabel.textColor = .white
+            self.homeLabel.setTitleColor(.white, for: .normal)
             self.layoutIfNeeded()
             self.delegate?.changePage(page: .Home)
+            print(self.pubNames)
         }
         
+    }
+    
+    
+    private func generateMenuOptions()->[UIAction]{
+        var actions:[UIAction] = []
+        print(pubNames)
+        for item in pubNames {
+            print("IIETM")
+            let a = UIAction(title: item, image: nil, handler: { (_) in
+                self.delegate?.pubFilter(pubName: item)
+                    })
+            actions.append(a)
+        }
+        let a = UIAction(title: "Show All", image: nil, handler: { (_) in
+            self.delegate?.pubAll()
+                })
+        actions.append(a)
+        return actions
+    }
+    
+    func changeMenu(){
+        homeLabel.menu = filterMenu?.replacingChildren(generateMenuOptions())
+    }
+    
+    func buttonTitleAttr()->NSAttributedString{
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.systemFont(ofSize: 14, weight: .bold)
+        ]
+        let attributedTitle = NSAttributedString(string: "Home", attributes: attributes)
+        return attributedTitle
     }
 
 }

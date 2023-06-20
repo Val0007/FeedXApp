@@ -99,6 +99,28 @@ class SqlDB{
             return []
         }
     }
+    
+    func getPublishers(foldername:String) -> [String]{
+        guard let db  = SqlDB.shared.database else {return []}
+        do{
+            let q = try db.prepare("Select * from link where folder = ?")
+            let results = try q.run(foldername)
+            var pubs :[String] = []
+            for row in results{
+                print(row)
+                if let r = row as? [String]{
+                    print(r)
+                    if !r.isEmpty{
+                        pubs.append(r[1])
+                    }
+                }
+            }
+            return pubs
+        }
+        catch{
+            return []
+        }
+    }
 
     func folderExists()->Bool{
         return false

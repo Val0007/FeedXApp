@@ -16,23 +16,24 @@ class ViewController: UIViewController {
     var st:SlideInPresentationManager?
     let db = SqlDB.shared
     var items:[feedItem] = []
+    var parentCopyItems:[feedItem] = []
     let tabBT = TabBt() //bottom tab bar
     let cv = UICollectionView(frame: .zero, collectionViewLayout: createHorizontalFlowLayout())
     var selectedIndex = 0
     var folderNames:[String] = []
     let bottomBar = BottomBar()
 
+
     override func viewDidLoad() {
         super.viewDidLoad()
         //let folders = db.getFolders()
         //folderBar = FolderBar(frame: .zero, f: folders)
-        
+        folderNames = db.getFolders()
         setup()
         layout()
         style()
         NotificationManager().status()
         UIApplication.shared.isStatusBarHidden=true; // for status bar hide
-        folderNames = db.getFolders()
         if(!folderNames.isEmpty){
             fetchData(folderName: folderNames[0])
         }
@@ -71,12 +72,17 @@ class ViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(urlCell.self, forCellReuseIdentifier: urlCell.identifier)
+        tableView.register(articleCell.self, forCellReuseIdentifier: "articleCell")
 
 //        view.addSubview(tabBT)
 //        tabBT.delegate = self
 
+        bottomBar.pubNames = db.getPublishers(foldername: folderNames[selectedIndex])
+        bottomBar.changeMenu()
         view.addSubview(bottomBar)
         bottomBar.delegate = self
+        
+        
     }
     
     private func layout(){
@@ -103,6 +109,8 @@ class ViewController: UIViewController {
     
     private func style(){
         tableView.separatorStyle = .none
+        tableView.backgroundColor = UIColor(red: 0.97, green: 0.97, blue: 1.00, alpha: 1.00)
+//        tableView.backgroundColor = UIColor(red: 0.85, green: 0.89, blue: 0.89, alpha: 1.00)
 //        tabBT.centerX(inView: view)
 //        tabBT.anchor(bottom:view.bottomAnchor,paddingBottom: 60,width: view.frame.width * 0.40,height: view.frame.height * 0.05)
 
@@ -127,6 +135,7 @@ class ViewController: UIViewController {
             print("COMPLETED")
             DispatchQueue.main.async {
                 self.tableView.reloadData()
+                self.parentCopyItems = self.items
             }
         }
     }
@@ -157,6 +166,8 @@ class ViewController: UIViewController {
         appearance.titleTextAttributes = titleAttribute
     }
     
+    
+
 
     
 
@@ -170,19 +181,29 @@ extension ViewController:UITableViewDataSource,UITableViewDelegate{
         return items.count
     }
         
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        let cell  = tableView.dequeueReusableCell(withIdentifier: urlCell.identifier, for: indexPath) as! urlCell
+//        let item = items[indexPath.row]
+//        cell.makeCell(item: item)
+//        return cell
+//    }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell  = tableView.dequeueReusableCell(withIdentifier: urlCell.identifier, for: indexPath) as! urlCell
+        let cell  = tableView.dequeueReusableCell(withIdentifier: "articleCell", for: indexPath) as! articleCell
         let item = items[indexPath.row]
-        cell.makeCell(item: item)
+        cell.update(item: item)
+        let bgColorView = UIView()
+        bgColorView.backgroundColor = UIColor(red: 0.85, green: 0.89, blue: 0.89, alpha: 1.00)
+        cell.selectedBackgroundView = bgColorView
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        view.frame.height * 0.11
+        view.frame.height * 0.20
     }
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         let item = items[indexPath.row]
         let wk = WebViewController(u: item.feedItemLink)
         self.navigationController?.pushViewController(wk, animated: true)
@@ -267,6 +288,16 @@ extension ViewController:tabButtonClick{
             presentSideVC()
         }
     }
+    
+    func pubFilter(pubName: String) {
+        items = parentCopyItems.filter { $0.feedPublisher == pubName }
+        tableView.reloadData()
+    }
+    
+    func pubAll() {
+        items = parentCopyItems
+        tableView.reloadData()
+    }
 }
 
 extension ViewController:SideVCPush{
@@ -299,7 +330,11 @@ extension ViewController:SideVCPush{
 extension ViewController:FolderBarDelegate{
     func switchFolder(folder: String) {
         self.items = []
+        self.parentCopyItems = []
         fetchData(folderName: folder)
+        bottomBar.pubNames = db.getPublishers(foldername: folderNames[selectedIndex])
+        bottomBar.changeMenu()
+
     }
     
     

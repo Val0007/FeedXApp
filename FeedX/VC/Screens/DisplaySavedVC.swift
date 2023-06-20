@@ -63,7 +63,9 @@ class DisplaySavedVC: UIViewController {
         tv.addConstraintsToFillView(view)
         tv.delegate = self
         tv.dataSource = self
-        tv.register(urlCell.self, forCellReuseIdentifier: urlCell.identifier)
+//        tv.register(urlCell.self, forCellReuseIdentifier: urlCell.identifier)
+        tv.register(articleCell.self, forCellReuseIdentifier: "articleCell")
+        tv.backgroundColor = UIColor(red: 0.97, green: 0.97, blue: 1.00, alpha: 1.00)
         tv.separatorStyle = .none
     }
     
@@ -76,14 +78,17 @@ extension DisplaySavedVC:UITableViewDelegate,UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell  = tableView.dequeueReusableCell(withIdentifier: urlCell.identifier, for: indexPath) as! urlCell
+        let cell  = tableView.dequeueReusableCell(withIdentifier: "articleCell", for: indexPath) as! articleCell
         let item = items[indexPath.row]
-        cell.makeCell(item: item)
+        cell.update(item: item)
+        let bgColorView = UIView()
+        bgColorView.backgroundColor = UIColor(red: 0.85, green: 0.89, blue: 0.89, alpha: 1.00)
+        cell.selectedBackgroundView = bgColorView
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        view.frame.height * 0.11
+        view.frame.height * 0.20
     }
     
     
