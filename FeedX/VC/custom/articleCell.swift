@@ -30,7 +30,7 @@ class articleCell: UITableViewCell {
     
     func setup(){
         addSubview(container)
-        container.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 4, paddingLeft: 5, paddingBottom: 14, paddingRight: 5)
+        container.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 4, paddingLeft: 2, paddingBottom: 4, paddingRight: 2)
         backgroundColor = .clear
 //        container.backgroundColor  = UIColor(red: 0.98, green: 0.98, blue: 0.99, alpha: 1.00)
         container.backgroundColor = .white

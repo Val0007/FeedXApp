@@ -22,7 +22,8 @@ class ViewController: UIViewController {
     var selectedIndex = 0
     var folderNames:[String] = []
     let bottomBar = BottomBar()
-
+    var selectedRowIndex:Int?
+    //let webViewManager:WebViewPreloader = WebViewPreloader()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -136,6 +137,11 @@ class ViewController: UIViewController {
             DispatchQueue.main.async {
                 self.tableView.reloadData()
                 self.parentCopyItems = self.items
+//                self.webViewManager.urlStrings = self.parentCopyItems.map({ item in
+//                    return item.feedItemLink
+//                })
+//                print("MANAGERR")
+//                self.webViewManager.fetchUrls()
             }
         }
     }
@@ -205,8 +211,11 @@ extension ViewController:UITableViewDataSource,UITableViewDelegate{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let item = items[indexPath.row]
+        selectedRowIndex = indexPath.row
         let wk = WebViewController(u: item.feedItemLink)
+        wk.delegate = self
         self.navigationController?.pushViewController(wk, animated: true)
+
     }
     
     
@@ -337,8 +346,24 @@ extension ViewController:FolderBarDelegate{
 
     }
     
-    
+}
 
+extension ViewController:webVCdelegate{
+    func getNextArticle() -> feedItem? {
+        if let index = selectedRowIndex{
+            if(items.indices.contains(index + 1)){
+                return items[index + 1]
+            }
+        }
+        else{
+            print("whhh")
+        }
+        return nil
+    }
+    
+    func changeSelectedIndex() {
+        selectedRowIndex! += 1
+    }
 }
 
 extension ViewController:UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout{

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		8F2C19048C8692CEF59C6C46 /* Pods_FeedX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F359CC190ACF347922FD235 /* Pods_FeedX.framework */; };
 		B3006963297190E200776483 /* AddURLVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3006962297190E200776483 /* AddURLVC.swift */; };
+		B305EF822A4B4843005D7ABA /* folderButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B305EF812A4B4843005D7ABA /* folderButton.swift */; };
 		B315730F29D01E29001B685A /* DisplaySavedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B315730E29D01E29001B685A /* DisplaySavedVC.swift */; };
 		B315731129D0240E001B685A /* webVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B315731029D0240E001B685A /* webVC.swift */; };
 		B31C371828ED491400FA3464 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31C371728ED491400FA3464 /* AppDelegate.swift */; };
@@ -32,6 +33,7 @@
 		B36D7F3A296D3F21002FF919 /* AddFolderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36D7F39296D3F21002FF919 /* AddFolderVC.swift */; };
 		B37DA7522A2515560023CDFB /* deleteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37DA7512A2515560023CDFB /* deleteCell.swift */; };
 		B39C46F729C0F5BA004FCD7A /* TabBt.swift in Sources */ = {isa = PBXBuildFile; fileRef = B39C46F629C0F5BA004FCD7A /* TabBt.swift */; };
+		B3B4F3E52A49FB690082A8E1 /* WebViewLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B4F3E42A49FB690082A8E1 /* WebViewLoader.swift */; };
 		B3DF483A2974590600668643 /* urlCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3DF48392974590600668643 /* urlCell.swift */; };
 		B3DF483C29745EC100668643 /* paddedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3DF483B29745EC000668643 /* paddedLabel.swift */; };
 		B3DF483E297465AC00668643 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3DF483D297465AC00668643 /* WebView.swift */; };
@@ -111,6 +113,7 @@
 		06B15C612D4C2EF5F90F9CAA /* Pods-FeedX.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FeedX.debug.xcconfig"; path = "Target Support Files/Pods-FeedX/Pods-FeedX.debug.xcconfig"; sourceTree = "<group>"; };
 		6F359CC190ACF347922FD235 /* Pods_FeedX.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FeedX.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3006962297190E200776483 /* AddURLVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddURLVC.swift; sourceTree = "<group>"; };
+		B305EF812A4B4843005D7ABA /* folderButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = folderButton.swift; sourceTree = "<group>"; };
 		B315730E29D01E29001B685A /* DisplaySavedVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplaySavedVC.swift; sourceTree = "<group>"; };
 		B315731029D0240E001B685A /* webVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = webVC.swift; sourceTree = "<group>"; };
 		B31C371428ED491400FA3464 /* FeedX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FeedX.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -139,6 +142,7 @@
 		B36D7F39296D3F21002FF919 /* AddFolderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFolderVC.swift; sourceTree = "<group>"; };
 		B37DA7512A2515560023CDFB /* deleteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = deleteCell.swift; sourceTree = "<group>"; };
 		B39C46F629C0F5BA004FCD7A /* TabBt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBt.swift; sourceTree = "<group>"; };
+		B3B4F3E42A49FB690082A8E1 /* WebViewLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewLoader.swift; sourceTree = "<group>"; };
 		B3DF48392974590600668643 /* urlCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = urlCell.swift; sourceTree = "<group>"; };
 		B3DF483B29745EC000668643 /* paddedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = paddedLabel.swift; sourceTree = "<group>"; };
 		B3DF483D297465AC00668643 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
@@ -214,6 +218,7 @@
 				B36AF3892932913400124182 /* NotificationService.swift */,
 				B3209CC929334A5A00945D64 /* operation.swift */,
 				B34A207129C43F5B00D90334 /* CellModel.swift */,
+				B3B4F3E42A49FB690082A8E1 /* WebViewLoader.swift */,
 			);
 			path = FeedX;
 			sourceTree = "<group>";
@@ -284,6 +289,7 @@
 				B32543E02A40AB76004B296E /* folderNameCell.swift */,
 				B32543E42A40CE8E004B296E /* BottomBar.swift */,
 				B32832B72A417F7C00B127D3 /* articleCell.swift */,
+				B305EF812A4B4843005D7ABA /* folderButton.swift */,
 			);
 			path = custom;
 			sourceTree = "<group>";
@@ -488,10 +494,12 @@
 				B3DF483E297465AC00668643 /* WebView.swift in Sources */,
 				B31C373828ED4B1900FA3464 /* ExtensionsUI.swift in Sources */,
 				B31C373228ED4A2700FA3464 /* InputCard.swift in Sources */,
+				B305EF822A4B4843005D7ABA /* folderButton.swift in Sources */,
 				B34A207029C4372000D90334 /* DeleteURLVC.swift in Sources */,
 				B31C373A28ED4B4E00FA3464 /* Networking.swift in Sources */,
 				B31C371828ED491400FA3464 /* AppDelegate.swift in Sources */,
 				B315731129D0240E001B685A /* webVC.swift in Sources */,
+				B3B4F3E52A49FB690082A8E1 /* WebViewLoader.swift in Sources */,
 				B3DF483A2974590600668643 /* urlCell.swift in Sources */,
 				B31C373428ED4A3000FA3464 /* FolderBar.swift in Sources */,
 				B32543E52A40CE8E004B296E /* BottomBar.swift in Sources */,
