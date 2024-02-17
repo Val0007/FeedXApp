@@ -7,9 +7,15 @@
 
 import UIKit
 
+protocol AddDelegate{
+    func refreshFolder()
+    func refreshUrlFeed()
+}
+
 class AddURLVC: UIViewController {
     
     var inputCard:InputCard?
+    var delegate:AddDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -11,7 +11,7 @@ class AddFolderVC: UIViewController {
     
     let tf:UITextField = PaddedTf()
     let submitBtn = UIButton()
-    
+    var delegate:AddDelegate?
     
 
     override func viewDidLoad() {
@@ -65,7 +65,8 @@ class AddFolderVC: UIViewController {
         guard let folderName = tf.text,!folderName.isEmpty else {return}
         SqlDB.shared.insertElement(type: .Folders(folderName)) { success in
             if success{
-                SqlDB.shared.getFolders()
+                print("SUCCRSSFULL")
+                delegate?.refreshFolder()
                 navigationController?.popViewController(animated: true)
             }
             else{

@@ -9,7 +9,8 @@ import UIKit
 import SnapKit
 
 
-class ViewController: UIViewController {
+class ViewController: UIViewController{
+    
     
     //var folderBar:FolderBar?
     let tableView = UITableView()
@@ -23,22 +24,18 @@ class ViewController: UIViewController {
     var folderNames:[String] = []
     let bottomBar = BottomBar()
     var selectedRowIndex:Int?
-    //let webViewManager:WebViewPreloader = WebViewPreloader()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        //let folders = db.getFolders()
-        //folderBar = FolderBar(frame: .zero, f: folders)
-        folderNames = db.getFolders()
         setup()
         layout()
         style()
         NotificationManager().status()
         UIApplication.shared.isStatusBarHidden=true; // for status bar hide
+        loadFolderView()
         if(!folderNames.isEmpty){
             fetchData(folderName: folderNames[0])
         }
-        cv.reloadData()
         tableView.reloadData()
 //        db.dropTable()
     }
@@ -48,20 +45,15 @@ class ViewController: UIViewController {
         self.navigationController?.navigationBar.isHidden = true
     }
     
+    private func loadFolderView(){
+        folderNames = db.getFolders()
+        print("folders are ",folderNames)
+        cv.reloadData()
+    }
+    
     private func setup(){
         self.navigationController?.navigationBar.isHidden = true
         view.backgroundColor = .white
-//        guard let folderBar = folderBar else {
-//            return
-//        }
-//        folderBar.delegate = self
-//        view.addSubview(folderBar)
-        
-        
-//        view.addSubview(tb)
-//        tb.delegate = self
-        
-        
         //collectionview
         view.addSubview(cv)
         cv.dataSource = self
@@ -75,11 +67,11 @@ class ViewController: UIViewController {
         tableView.register(urlCell.self, forCellReuseIdentifier: urlCell.identifier)
         tableView.register(articleCell.self, forCellReuseIdentifier: "articleCell")
 
-//        view.addSubview(tabBT)
-//        tabBT.delegate = self
-
+        if !(folderNames == []){
+        //To create filter options
         bottomBar.pubNames = db.getPublishers(foldername: folderNames[selectedIndex])
         bottomBar.changeMenu()
+        }
         view.addSubview(bottomBar)
         bottomBar.delegate = self
         
@@ -87,12 +79,7 @@ class ViewController: UIViewController {
     }
     
     private func layout(){
-//        guard let folderBar = folderBar else {
-//            return
-//        }
 
-//        folderBar.anchor(top:view.safeAreaLayoutGuide.topAnchor,left: view.safeAreaLayoutGuide.leftAnchor,right: view.safeAreaLayoutGuide.rightAnchor,height: view.frame.height * 0.08)
-        
         cv.translatesAutoresizingMaskIntoConstraints = false
         cv.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         cv.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.07).isActive  = true
@@ -111,10 +98,6 @@ class ViewController: UIViewController {
     private func style(){
         tableView.separatorStyle = .none
         tableView.backgroundColor = UIColor(red: 0.97, green: 0.97, blue: 1.00, alpha: 1.00)
-//        tableView.backgroundColor = UIColor(red: 0.85, green: 0.89, blue: 0.89, alpha: 1.00)
-//        tabBT.centerX(inView: view)
-//        tabBT.anchor(bottom:view.bottomAnchor,paddingBottom: 60,width: view.frame.width * 0.40,height: view.frame.height * 0.05)
-
         
     }
     
@@ -137,11 +120,7 @@ class ViewController: UIViewController {
             DispatchQueue.main.async {
                 self.tableView.reloadData()
                 self.parentCopyItems = self.items
-//                self.webViewManager.urlStrings = self.parentCopyItems.map({ item in
-//                    return item.feedItemLink
-//                })
-//                print("MANAGERR")
-//                self.webViewManager.fetchUrls()
+                
             }
         }
     }
@@ -184,15 +163,20 @@ class ViewController: UIViewController {
 extension ViewController:UITableViewDataSource,UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if folderNames.count == 0{
+            self.tableView.setEmptyMessage("Add a folder to add feed Links")
+        }
+        else{
+            if items.count == 0 {  //a folder exits
+                self.tableView.setEmptyMessage("Add RSS feed links to see Feed")
+            }
+            else{
+                self.tableView.restore()
+            }
+        }
         return items.count
     }
         
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell  = tableView.dequeueReusableCell(withIdentifier: urlCell.identifier, for: indexPath) as! urlCell
-//        let item = items[indexPath.row]
-//        cell.makeCell(item: item)
-//        return cell
-//    }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell  = tableView.dequeueReusableCell(withIdentifier: "articleCell", for: indexPath) as! articleCell
         let item = items[indexPath.row]
@@ -313,7 +297,9 @@ extension ViewController:SideVCPush{
     func pushVC(type:types) {
         switch type {
         case .anf:
-            self.navigationController?.pushViewController(AddFolderVC(), animated: true)
+            let addvc = AddFolderVC()
+            addvc.delegate = self
+            self.navigationController?.pushViewController(addvc, animated: true)
         case .anu:
             self.navigationController?.pushViewController(AddURLVC(), animated: true)
         case .df:
@@ -366,8 +352,25 @@ extension ViewController:webVCdelegate{
     }
 }
 
+extension ViewController:AddDelegate{
+    func refreshFolder() {
+        loadFolderView()
+        selectedIndex = folderNames.count - 1
+        switchFolder(folder: folderNames[selectedIndex])
+    }
+    func refreshUrlFeed() {
+        
+    }
+}
+
 extension ViewController:UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if folderNames.count == 0{
+            self.setEmptyMessage("Add New Folders To See them here")
+        }
+        else{
+            self.restore()
+        }
         return folderNames.count
     }
     
@@ -405,6 +408,43 @@ extension ViewController:UICollectionViewDataSource,UICollectionViewDelegate,UIC
         }
     
     
+    func setEmptyMessage(_ message: String) {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.distribution = .fillEqually
+        let bt = UIButton()
+        bt.setTitle("Add Folder", for: .normal)
+        bt.backgroundColor = .link
+        let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: cv.bounds.size.width, height: cv.bounds.size.height))
+        messageLabel.text = message
+        messageLabel.textColor = .black
+        messageLabel.numberOfLines = 0
+        messageLabel.textAlignment = .center
+        messageLabel.font = .systemFont(ofSize: 16, weight: .semibold)
+        messageLabel.sizeToFit()
+
+        stackView.addArrangedSubview(messageLabel)
+        stackView.addArrangedSubview(bt)
+        stackView.alignment = .center
+        stackView.spacing  = 5
+        bt.translatesAutoresizingMaskIntoConstraints = false
+        bt.widthAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.3).isActive = true
+        bt.layer.cornerRadius = 5
+        bt.setTitleColor(.white, for: .normal)
+        bt.addTarget(self, action: #selector(handleAddFolder), for: .touchUpInside)
+        cv.backgroundView = stackView
+    }
+
+    func restore() {
+        cv.backgroundView = nil
+    }
+    
+    @objc func handleAddFolder(){
+        let addvc = AddFolderVC()
+        addvc.delegate = self
+        self.navigationController?.pushViewController(addvc, animated: true)
+    }
+    
 }
 
 
@@ -413,4 +453,31 @@ func createHorizontalFlowLayout() -> UICollectionViewFlowLayout {
     let layout = UICollectionViewFlowLayout()
     layout.scrollDirection = .horizontal
     return layout
+}
+
+
+extension UITableView {
+
+    func setEmptyMessage(_ message: String) {
+        let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.bounds.size.width, height: self.bounds.size.height))
+        messageLabel.text = message
+        messageLabel.textColor = .black
+        messageLabel.numberOfLines = 0
+        messageLabel.textAlignment = .center
+        messageLabel.font = .systemFont(ofSize: 16, weight: .semibold)
+        messageLabel.sizeToFit()
+
+        self.backgroundView = messageLabel
+        self.separatorStyle = .none
+    }
+
+    func restore() {
+        self.backgroundView = nil
+        self.separatorStyle = .none
+    }
+}
+
+extension UICollectionView {
+
+
 }
